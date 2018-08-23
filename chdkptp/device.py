@@ -399,9 +399,9 @@ class ChdkDevice(object):
                     raise RuntimeError(
                         "To convert into JPEG or PNG, please install the "
                         "`pillow` package.")
-                img = Image.open(io.StringIO(imgdata))
+                img = Image.open(io.BytesIO(bytearray(imgdata, 'latin-1')))
                 width, height = img.size
-                img.resize((width/2, height))
+                img.resize((int(width/2), height))
                 imgdata = img.tobytes('PNG' if format == 'png' else 'JPEG')
                 yield imgdata
 
@@ -593,6 +593,7 @@ class ChdkDevice(object):
             options['isomode'] = int(kwargs.get('isomode', None))
         if kwargs.get('shutter_speed', None) is not None:
             options['tv'] = kwargs.get('shutter_speed', None)
+        # TODO: Resolve this doubled None check
         if kwargs.get('nd_filter', None):
             options['nd'] = 1 if kwargs.get('nd_filter', None) else 2
         if kwargs.get('distance', None) is not None:
