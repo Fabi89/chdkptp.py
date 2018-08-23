@@ -145,9 +145,9 @@ LuaTable = type(global_lua.table())
 
 def parse_table(table):
     out = dict(table)
-    for key, val in out.iteritems():
+    for key, val in out.items():
         if isinstance(val, LuaTable):
             out[key] = parse_table(val)
-    if all(x.isdigit() for x in out.iterkeys()):
+    if all(x.isdigit() for x in iter(out.keys())):
         out = tuple(out.values())
     return out

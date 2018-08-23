@@ -52,7 +52,7 @@ def list_devices():
         return info;
         """)
     infos = []
-    for dev_info in devices.values():
+    for dev_info in list(devices.values()):
         dev_info = dict(dev_info)
         dev_info['chdk_api'] = (dev_info['chdk_api'].MAJOR,
                                 dev_info['chdk_api'].MINOR)
@@ -179,16 +179,16 @@ class ChdkDevice(object):
         # NOTE: Because of the frequency of curly braces, we prefer old-style
         # string formatting in this case, since this saves us quite a bit of
         # escaping
-        lua_rvals, msgs = self._lua.pexecute("""
+        lua_rvals, msgs = list(self._lua.pexecute("""
             local rvals = {}
             local msgs = {}
             con:execwait([[%s]], {rets=rvals, msgs=msgs, libs=%s})
             return {rvals, msgs}
-            """ % (lua_code, remote_libs)).values()
+            """ % (lua_code, remote_libs)).values())
         if not do_return:
             return None
         return_values = []
-        for rv in lua_rvals.values():
+        for rv in list(lua_rvals.values()):
             return_values.append(self._parse_message(rv).value)
         if len(return_values) == 1:
             return return_values[0]
@@ -315,12 +315,12 @@ class ChdkDevice(object):
         flist = self._lua.call("con:listdir", remote_path, dirsonly=False,
                                stat="*" if detailed else "/")
         if not detailed:
-            return [os.path.join(remote_path, p) for p in flist.values()]
+            return [os.path.join(remote_path, p) for p in list(flist.values())]
         else:
             return [tuple(os.path.join(remote_path,
-                                       dict(info.items())['name']),
-                          {k: v for k, v in info.items() if k != 'name'})
-                    for info in flist.values()]
+                                       dict(list(info.items()))['name']),
+                          {k: v for k, v in list(info.items()) if k != 'name'})
+                    for info in list(flist.values())]
 
     def mkdir(self, remote_path):
         """ Create a directory on the device.

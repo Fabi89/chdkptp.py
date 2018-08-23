@@ -14,7 +14,7 @@ class Mock(object):
 
     @classmethod
     def __getattr__(cls, name):
-        print "Getting mock: ", name
+        print("Getting mock: ", name)
         if name in ('__file__', '__path__'):
             return '/dev/null'
         elif name == 'eval':
@@ -45,8 +45,8 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 
-project = u'chdkptp.py'
-copyright = u'2014, Johannes Baiter'
+project = 'chdkptp.py'
+copyright = '2014, Johannes Baiter'
 version = '0.1'
 release = '0.1'
 
@@ -61,18 +61,18 @@ latex_elements = {
     'preamble': '',
 }
 latex_documents = [
-    ('index', 'chdkptppy.tex', u'chdkptp.py Documentation',
-     u'Johannes Baiter', 'manual'),
+    ('index', 'chdkptppy.tex', 'chdkptp.py Documentation',
+     'Johannes Baiter', 'manual'),
 ]
 
 man_pages = [
-    ('index', 'chdkptppy', u'chdkptp.py Documentation',
-     [u'Johannes Baiter'], 1)
+    ('index', 'chdkptppy', 'chdkptp.py Documentation',
+     ['Johannes Baiter'], 1)
 ]
 
 texinfo_documents = [
-    ('index', 'chdkptppy', u'chdkptp.py Documentation',
-     u'Johannes Baiter', 'chdkptppy', 'One line description of project.',
+    ('index', 'chdkptppy', 'chdkptp.py Documentation',
+     'Johannes Baiter', 'chdkptppy', 'One line description of project.',
      'Miscellaneous'),
 ]
 
