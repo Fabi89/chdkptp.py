@@ -22,24 +22,32 @@ if dev.mode == 'record':
 dev.switch_mode('record')
 assert dev.mode == 'record'
 
-print("Checking streaming JPEG capture")
-for i in range(5):
-    fpath = os.path.join(tmp_dir, "stream_{0:02}.jpg".format(i))
-    imgdata = dev.shoot()
-    with open(fpath, 'wb') as fp:
-        fp.write(imgdata)
+for fmt_type in ('ppm', 'jpg', 'png'):
+    print("Checking get {} viewport frames".format(fmt_type))
+    c = 0
+    for imgdata in dev.get_frames(format=fmt_type):
+        if c > 5:
+            break
+        c += 1
+        fpath = os.path.join(tmp_dir, "viewport_{0:02}.{1}".format(c, fmt_type))
+        imgdata = bytearray(imgdata, 'latin-1')
+        with open(fpath, 'wb') as fp:
+            fp.write(imgdata)
 
-print("Checking streaming DNG capture")
-for i in range(5):
-    fpath = os.path.join(tmp_dir, "stream_{0:02}.dng".format(i))
-    imgdata = dev.shoot(dng=True)
-    with open(fpath, 'wb') as fp:
-        fp.write(imgdata)
+for fmt_type in ('jpg', 'dng'):
+    print("Checking {} stream capture".format(fmt_type))
+    for i in range(5):
+        fpath = os.path.join(tmp_dir, "stream_{0:02}.{1}".format(i, fmt_type))
+        imgdata = dev.shoot(stream=True)  # default
+        imgdata = bytearray(imgdata, 'latin-1')
+        with open(fpath, 'wb') as fp:
+            fp.write(imgdata)
 
 print("Checking downloading JPEG capture")
 for i in range(5):
     fpath = os.path.join(tmp_dir, "download_{0:02}.jpg".format(i))
     imgdata = dev.shoot(stream=False, download_after=True, remove_after=True)
+    imgdata = bytearray(imgdata, 'latin-1')
     with open(fpath, 'wb') as fp:
         fp.write(imgdata)
 
